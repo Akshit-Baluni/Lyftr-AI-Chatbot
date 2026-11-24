@@ -1,12 +1,14 @@
 # Lyftr AI Chatbot
 
+A multi-turn AI chatbot built using React, FastAPI, SQLite, LiteLLM, Groq and Docker. The application supports conversational context, persistent chat sessions, response metadata, API-key fallback handling and caching.
+
 ## 1. Live URLs
 
-- **Frontend:** `Pending deployment`
-- **Backend:** `Pending deployment`
-- **API Documentation:** `Pending deployment`
+- **Frontend:** Pending deployment
+- **Backend:** Pending deployment
+- **API Documentation:** Pending deployment
 
-## 2. Run locally: with Docker and without
+## 2. Run Locally
 
 ### Prerequisites
 
@@ -17,12 +19,16 @@
 
 ### Configuration
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root directory.
 
 ```env
 LLM_MODEL=groq/openai/gpt-oss-120b
 LLM_API_KEYS=your_api_key_here
 ```
+
+For multiple API keys, configure them using the format supported by the backend.
+
+Never commit real API keys to GitHub.
 
 ### Run with Docker
 
@@ -40,14 +46,22 @@ docker compose up -d
 
 Access the application:
 
-- **Frontend:** http://localhost:5173
-- **Backend:** http://localhost:8001
-- **API Documentation:** http://localhost:8001/docs
+- **Frontend:** http://localhost:3000
+- **Backend:** http://localhost:8000
+- **API Documentation:** http://localhost:8000/docs
+- **Health Endpoint:** http://localhost:8000/health
 
 Stop the application:
 
 ```bash
 docker compose down
+```
+
+Alternatively, use the Makefile commands:
+
+```bash
+make up
+make down
 ```
 
 ### Run without Docker
@@ -58,6 +72,18 @@ Navigate to the backend directory:
 
 ```bash
 cd backend
+```
+
+Create and activate a virtual environment:
+
+```bash
+python -m venv venv
+```
+
+On Windows:
+
+```powershell
+.\venv\Scripts\Activate.ps1
 ```
 
 Install dependencies:
@@ -74,7 +100,7 @@ uvicorn main:app --reload
 
 #### Frontend
 
-Navigate to the frontend directory:
+Open a separate terminal and navigate to the frontend directory:
 
 ```bash
 cd frontend
@@ -92,45 +118,49 @@ Start the frontend development server:
 npm run dev
 ```
 
-## 3. Design decisions: key fallback, caching, SQLite session storage
+## 3. Design Decisions
 
-### Key fallback
+### API-Key Fallback
 
-The application integrates an LLM through LiteLLM. API-key configuration and fallback handling are implemented to improve resilience against provider-related failures.
+The application integrates an LLM through LiteLLM. Multiple API keys can be configured to support fallback handling when an API request encounters supported failures.
 
-The application is designed to handle API failures without disrupting the chatbot interface.
+This improves the application's resilience to provider-related errors, including rate limits and server-side failures.
 
 ### Caching
 
-Caching is implemented to reduce repeated LLM requests and improve response efficiency. Cached responses help reduce unnecessary API calls for repeated requests.
+Caching is integrated into the LLM request workflow to help reduce repeated inference requests and improve response efficiency.
 
-### SQLite session storage
+Cache behavior is implemented in the backend. Cache-hit behavior is subject to verification.
 
-SQLite is used to persist conversation sessions and messages.
+### SQLite Session Storage
+
+SQLite is used to store conversation sessions and messages.
 
 The backend maintains session-specific conversation history, allowing the chatbot to retain context across multiple messages within a conversation.
 
-The database is configured through the `DATABASE_URL` environment variable and stored persistently in the Docker environment.
+The database is configured through the `DATABASE_URL` environment variable and stored persistently using a Docker volume.
 
-## 4. Verification: how to see failover, cache hits and per-message token usage
+## 4. Verification
 
-The application is tested through functional testing of the frontend, backend, database and LLM integration.
+The application supports functional verification through the frontend and backend APIs.
 
 Verification includes:
 
 - Sending messages and receiving AI-generated responses.
 - Testing multi-turn conversations.
 - Retrieving stored conversation history.
-- Creating new conversation sessions.
+- Creating and managing chat sessions.
 - Deleting conversations.
-- Refreshing the frontend and checking conversation persistence.
+- Checking backend health through the `/health` endpoint.
+- Accessing API functionality through Swagger UI.
 - Running the application through Docker Compose.
-- Checking backend health through the health endpoint.
-- Checking API functionality through Swagger UI.
+- Checking per-message response metadata, including model, latency and token usage.
 
-Cache-hit verification, failover verification through the `X-Simulate-Failure` header and per-request token usage will be demonstrated through the corresponding API and UI functionality.
+Fallback behavior can be tested using the failure simulation mechanism supported by the backend, including the `X-Simulate-Failure` header when failure simulation is enabled.
 
-## 5. Setup Used: your editor and AI tools
+Cache-hit behavior and other pending verification items will be validated as part of the final testing process.
+
+## 5. Setup Used
 
 - **Editor:** Visual Studio Code
 - **Backend:** Python, FastAPI
@@ -141,11 +171,13 @@ Cache-hit verification, failover verification through the `X-Simulate-Failure` h
 - **Containerization:** Docker and Docker Compose
 - **AI assistance:** ChatGPT
 
-## 6. Bonus features (if any): what you added beyond the requirements and why
+## 6. Bonus Features
 
 - Persistent conversation history.
 - Conversation deletion.
 - Chat session management through the frontend.
+- Multi-turn contextual conversations.
+- Response metadata display.
 - Additional application error handling.
 
-These features improve usability and make the chatbot easier to interact with and manage.
+These features improve usability and provide a more complete conversational experience.
