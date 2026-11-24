@@ -3,10 +3,13 @@
 A multi-turn AI chatbot built using React, FastAPI, SQLite, LiteLLM, Groq and Docker. The application supports conversational context, persistent chat sessions, response metadata, API-key fallback handling and caching.
 
 ## 1. Live URLs
+Live Application: https://frontend-peach-nu-73.vercel.app/
 
-- **Frontend:** Pending deployment
-- **Backend:** Pending deployment
-- **API Documentation:** Pending deployment
+Backend API: https://lyftr-ai-chatbot-xqno.onrender.com
+
+Backend API Documentation (Swagger): https://lyftr-ai-chatbot-xqno.onrender.com/docs
+
+A full-stack AI chatbot built with React, FastAPI, SQLite, Docker, and Groq-powered LLM inference. The application supports multi-turn conversations, session history, response metadata, API-key handling, and caching.
 
 ## 2. Run Locally
 
